@@ -15,60 +15,32 @@ namespace BumpVersion.Tests
 	[TestClass]
 	public class BumperTests
 	{
-		#region Test Data
-
-		private static string EmptyFileContent
+		[TestMethod]
+		public void BumpTest()
 		{
-			get
+			try
 			{
-				StringBuilder sb = new StringBuilder();
-				sb.AppendLine( "<?xml version=\"1.0\"?>" );
-				sb.AppendLine( "<bumpversion>" );
-				sb.AppendLine( "</bumpversion>" );
+				File.WriteAllText( "bump.xml", TestData.SimpleFileContent );
 
-				return sb.ToString();
+				Bumper bumper = new Bumper( "bump.xml" );
+				OperationResult result = bumper.Bump( new Version( 1, 0 ) );
+
+				Assert.IsTrue( File.Exists( "out.txt" ) );
+				Assert.AreEqual( "1.0", File.ReadAllText( "out.txt" ) );
+			}
+			finally
+			{
+				File.Delete( "bump.xml" );
+				File.Delete( "out.txt" );
 			}
 		}
-
-		private static string SimpleFileContent
-		{
-			get
-			{
-				StringBuilder sb = new StringBuilder();
-				sb.AppendLine( "<?xml version=\"1.0\"?>" );
-				sb.AppendLine( "<bumpversion>" );
-				sb.AppendLine( "<task type=\"WriteToFile\">" );
-				sb.AppendLine( "<key name=\"files\" value=\"out.txt\" />" );
-				sb.AppendLine( "</task>" );
-				sb.AppendLine( "</bumpversion>" );
-
-				return sb.ToString();
-			}
-		}
-
-		private static string UnknownTypeContent
-		{
-			get
-			{
-				StringBuilder sb = new StringBuilder();
-				sb.AppendLine( "<?xml version=\"1.0\"?>" );
-				sb.AppendLine( "<bumpversion>" );
-				sb.AppendLine( "<task type=\"UnknownType\">" );
-				sb.AppendLine( "</task>" );
-				sb.AppendLine( "</bumpversion>" );
-
-				return sb.ToString();
-			}
-		}
-
-		#endregion Test Data
 
 		[TestMethod]
 		public void LoadExceptionTest()
 		{
 			try
 			{
-				File.WriteAllText( "simpleException.xml", SimpleFileContent );
+				File.WriteAllText( "simpleException.xml", TestData.SimpleFileContent );
 
 				using( StringWriter sw = new StringWriter() )
 				{
@@ -106,7 +78,7 @@ namespace BumpVersion.Tests
 		{
 			try
 			{
-				File.WriteAllText( "simple.xml", SimpleFileContent );
+				File.WriteAllText( "simple.xml", TestData.SimpleFileContent );
 
 				Bumper bumper = new Bumper( "simple.xml" );
 			}
@@ -121,7 +93,7 @@ namespace BumpVersion.Tests
 		{
 			try
 			{
-				File.WriteAllText( "simpleValidate.xml", SimpleFileContent );
+				File.WriteAllText( "simpleValidate.xml", TestData.SimpleFileContent );
 
 				Bumper bumper = new Bumper( "simpleValidate.xml" );
 				OperationResult result = bumper.Vaildate();
@@ -139,7 +111,7 @@ namespace BumpVersion.Tests
 		{
 			try
 			{
-				File.WriteAllText( "unknownType.xml", UnknownTypeContent );
+				File.WriteAllText( "unknownType.xml", TestData.UnknownTypeContent );
 
 				using( StringWriter sw = new StringWriter() )
 				{
@@ -162,7 +134,7 @@ namespace BumpVersion.Tests
 		{
 			try
 			{
-				File.WriteAllText( "validate.xml", EmptyFileContent );
+				File.WriteAllText( "validate.xml", TestData.EmptyFileContent );
 
 				Bumper bumper = new Bumper( "validate.xml" );
 				OperationResult result = bumper.Vaildate();

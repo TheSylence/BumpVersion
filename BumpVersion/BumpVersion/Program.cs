@@ -10,14 +10,15 @@ namespace BumpVersion
 {
 	internal class Program
 	{
-		private static void Main( string[] args )
+		internal static void Main( string[] args )
 		{
 			Console.Error.NewLine = Environment.NewLine;
 
 			if( args.Length < 1 || args.Length > 2 )
 			{
 				PrintUsage();
-				Environment.Exit( 0 );
+				Environment.ExitCode = 0;
+				return;
 			}
 
 			// Parse given version
@@ -25,7 +26,7 @@ namespace BumpVersion
 			if( !Version.TryParse( args[0], out newVersion ) )
 			{
 				Console.Error.WriteLine( "Version '{0}' is not a valid version", args[0] );
-				Environment.Exit( -3 );
+				Environment.ExitCode = -3;
 				return;
 			}
 
@@ -45,7 +46,7 @@ namespace BumpVersion
 			catch( FileNotFoundException )
 			{
 				Console.Error.WriteLine( "The project file '{0}' could not be found", projectFile );
-				Environment.Exit( -1 );
+				Environment.ExitCode = -1;
 				return;
 			}
 
@@ -55,7 +56,7 @@ namespace BumpVersion
 			{
 				Console.Error.WriteLine( "There are some errors in your project file" );
 				Console.Error.WriteLine( validationResult.ToString() );
-				Environment.Exit( -2 );
+				Environment.ExitCode = -2;
 				return;
 			}
 
@@ -65,11 +66,12 @@ namespace BumpVersion
 			{
 				Console.Error.WriteLine( "Failed to bump version:" );
 				Console.Error.WriteLine( bumpResult.ToString( true, true ) );
-				Environment.Exit( -4 );
+				Environment.ExitCode = -4;
 				return;
 			}
 
 			Console.WriteLine( "Successfully bumped version to {0}", newVersion );
+			Environment.ExitCode = 0;
 		}
 
 		private static void PrintUsage()

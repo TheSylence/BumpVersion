@@ -22,9 +22,16 @@ namespace BumpVersion
 			ParseFile( fileName );
 		}
 
-		public OperationResult Bump()
+		public OperationResult Bump( Version newVersion )
 		{
-			throw new NotImplementedException();
+			OperationResult result = new OperationResult();
+
+			foreach( BumpTask task in TaskList )
+			{
+				result.Merge( task.Bump( newVersion ) );
+			}
+
+			return result;
 		}
 
 		/// <summary>
@@ -41,11 +48,7 @@ namespace BumpVersion
 
 			foreach( BumpTask task in TaskList )
 			{
-				OperationResult taskValidationResult = task.Validate();
-				if( !taskValidationResult.IsSuccess )
-				{
-					result.Merge( taskValidationResult );
-				}
+				result.Merge( task.Validate() );
 			}
 
 			return result;

@@ -20,6 +20,15 @@ namespace BumpVersion
 				Environment.Exit( 0 );
 			}
 
+			// Parse given version
+			Version newVersion;
+			if( !Version.TryParse( args[0], out newVersion ) )
+			{
+				Console.Error.WriteLine( "Version '{0}' is not a valid version", args[0] );
+				Environment.Exit( -3 );
+				return;
+			}
+
 			// Set project file to load
 			string projectFile = "bumpversion.xml";
 			if( args.Length == 2 )
@@ -41,17 +50,26 @@ namespace BumpVersion
 			}
 
 			// Validate project
-			OperationResult validation = bumper.Vaildate();
-			if( !validation.IsSuccess )
+			OperationResult validationResult = bumper.Vaildate();
+			if( !validationResult.IsSuccess )
 			{
 				Console.Error.WriteLine( "There are some errors in your project file" );
-				Console.Error.WriteLine( validation.ToString() );
+				Console.Error.WriteLine( validationResult.ToString() );
 				Environment.Exit( -2 );
 				return;
 			}
 
 			// Do the actual bumping
-			bumper.Bump();
+			OperationResult bumpResult = bumper.Bump( newVersion );
+			if( !bumpResult.IsSuccess )
+			{
+				Console.Error.WriteLine( "Failed to bump version:" );
+				Console.Error.WriteLine( bumpResult.ToString( true, true ) );
+				Environment.Exit( -4 );
+				return;
+			}
+
+			Console.WriteLine( "Successfully bumped version to {0}", newVersion );
 		}
 
 		private static void PrintUsage()

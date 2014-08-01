@@ -4,8 +4,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.QualityTools.Testing.Fakes;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace BumpVersion.Tests
@@ -61,6 +63,38 @@ namespace BumpVersion.Tests
 
 		#endregion Test Data
 
+		[TestMethod]
+		public void LoadExceptionTest()
+		{
+			try
+			{
+				File.WriteAllText( "simpleException.xml", SimpleFileContent );
+
+				using( StringWriter sw = new StringWriter() )
+				{
+					Console.SetError( sw );
+					using( ShimsContext.Create() )
+					{
+						System.Fakes.ShimActivator.CreateInstanceTypeObjectArray = ( Type, args ) =>
+						{
+							throw new TargetInvocationException( "test exception", new Exception( "inner exception" ) );
+						};
+
+						Bumper bumper = new Bumper( "simpleException.xml" );
+					}
+
+					string expected = "Failed to create task of type 'WriteToFile':";
+					Assert.IsTrue( sw.ToString().Contains( expected ) );
+					Assert.IsTrue( sw.ToString().Contains( "test exception" ) );
+					Assert.IsTrue( sw.ToString().Contains( "inner exception" ) );
+				}
+			}
+			finally
+			{
+				File.Delete( "simpleException.xml" );
+			}
+		}
+
 		[TestMethod, ExpectedException( typeof( FileNotFoundException ) )]
 		public void LoadNonExistingTest()
 		{
@@ -79,6 +113,24 @@ namespace BumpVersion.Tests
 			finally
 			{
 				File.Delete( "simple.xml" );
+			}
+		}
+
+		[TestMethod]
+		public void SimpleValidateTest()
+		{
+			try
+			{
+				File.WriteAllText( "simpleValidate.xml", SimpleFileContent );
+
+				Bumper bumper = new Bumper( "simpleValidate.xml" );
+				OperationResult result = bumper.Vaildate();
+
+				Assert.IsTrue( result.IsSuccess );
+			}
+			finally
+			{
+				File.Delete( "simpleValidate.xml" );
 			}
 		}
 

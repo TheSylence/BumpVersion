@@ -30,15 +30,15 @@ namespace BumpVersion.Tasks
 	{
 		private const string FileKey = "wixFile";
 
-		public WixProductID( Dictionary<string, string> settings )
-			: base( settings )
+		public WixProductID( Dictionary<string, string> settings, Dictionary<string, string> variables )
+			: base( settings, variables )
 		{
 		}
 
 		public override OperationResult Bump( Version newVersion )
 		{
 			OperationResult result = new OperationResult();
-			string wixFile = Settings[FileKey];
+			string wixFile = GetValue( FileKey );
 
 			XmlDocument doc = new XmlDocument();
 			WixNamespaceManager namespaceManager = new WixNamespaceManager( doc.NameTable );
@@ -65,12 +65,8 @@ namespace BumpVersion.Tasks
 		{
 			OperationResult result = new OperationResult();
 
-			string file;
-			if( !Settings.TryGetValue( FileKey, out file ) )
-			{
-				result.AddError( "No files given" );
-			}
-			else if( string.IsNullOrWhiteSpace( file ) )
+			string file = GetValue( FileKey );
+			if( string.IsNullOrWhiteSpace( file ) )
 			{
 				result.AddError( "No files given" );
 			}

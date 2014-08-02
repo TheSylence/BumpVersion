@@ -5,20 +5,24 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace BumpVersion.Tasks
 {
+#if false
 	/// <summary>
-	/// Task that writes the given version to one or more files
+	/// Task that replaces version strings in given files.
 	/// </summary>
-	internal class WriteToFile : BumpTask
+	internal class ReplaceInFile : BumpTask
 	{
 		private const string FileKey = "files";
+		private Regex Pattern;
 
-		public WriteToFile( Dictionary<string, string> settings, Dictionary<string, string> variables )
+		public ReplaceInFile( Dictionary<string, string> settings, Dictionary<string, string> variables )
 			: base( settings, variables )
 		{
+			Pattern = new Regex( @"(\d+\.\d+((\.\d+)?\.\d+)?)" );
 		}
 
 		public override OperationResult Bump( Version newVersion )
@@ -30,7 +34,11 @@ namespace BumpVersion.Tasks
 			{
 				try
 				{
-					File.WriteAllText( fileName, newVersion.ToString() );
+					string content = File.ReadAllText( fileName );
+
+					Pattern.Replace( content, newVersion.ToString() );
+
+					File.WriteAllText( fileName, content );
 				}
 				catch( IOException ex )
 				{
@@ -54,4 +62,5 @@ namespace BumpVersion.Tasks
 			return result;
 		}
 	}
+#endif
 }

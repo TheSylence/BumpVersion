@@ -24,7 +24,7 @@ namespace BumpVersion.Tests
 				{ "wixFile", "exception.wxs" }
 			};
 
-			WixProductID task = new WixProductID( settings );
+			WixProductID task = new WixProductID( settings, new Dictionary<string, string>() );
 			OperationResult result = task.Bump( new Version( 1, 0 ) );
 
 			Assert.IsFalse( result.IsSuccess );
@@ -41,7 +41,7 @@ namespace BumpVersion.Tests
 				{ "wixFile", "valid.wxs" }
 			};
 
-			WixProductID task = new WixProductID( settings );
+			WixProductID task = new WixProductID( settings, new Dictionary<string, string>() );
 			OperationResult result = task.Bump( new Version( 1, 0 ) );
 
 			Assert.IsTrue( result.IsSuccess );
@@ -55,21 +55,21 @@ namespace BumpVersion.Tests
 		public void ValidateTest()
 		{
 			Dictionary<string, string> settings = new Dictionary<string, string>();
-			WixProductID task = new WixProductID( settings );
+			WixProductID task = new WixProductID( settings, new Dictionary<string, string>() );
 			OperationResult validation = task.Validate();
 
 			Assert.IsFalse( validation.IsSuccess );
 			Assert.IsTrue( validation.ToString( true ).Contains( "No files given" ) );
 
 			settings["wixFile"] = string.Empty;
-			task = new WixProductID( settings );
+			task = new WixProductID( settings, new Dictionary<string, string>() );
 			validation = task.Validate();
 
 			Assert.IsFalse( validation.IsSuccess );
 			Assert.IsTrue( validation.ToString( true ).Contains( "No files given" ) );
 
 			settings["wixFile"] = "test.wxs";
-			task = new WixProductID( settings );
+			task = new WixProductID( settings, new Dictionary<string, string>() );
 			File.Delete( "test.wxs" );
 			validation = task.Validate();
 

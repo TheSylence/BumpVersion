@@ -67,6 +67,8 @@ namespace BumpVersion
 			// Yeah it's all about optimization ;)
 			TaskList = new List<BumpTask>( taskNodes.Count );
 
+			Dictionary<string, string> variables = new Dictionary<string, string>();
+
 			foreach( XmlElement taskNode in taskNodes )
 			{
 				string type = taskNode.GetAttribute( "type" );
@@ -90,15 +92,24 @@ namespace BumpVersion
 				}
 
 				// And finally create the task and feed it the settings
+				BumpTask task;
 				try
 				{
-					TaskList.Add( (BumpTask)Activator.CreateInstance( taskType, settings ) );
+					task = (BumpTask)Activator.CreateInstance( taskType, settings, variables );
 				}
 				catch( TargetInvocationException ex )
 				{
 					Console.Error.WriteLine( "Failed to create task of type '{0}':", type );
 					Console.Error.WriteLine( ex );
+					continue;
 				}
+
+				foreach( KeyValuePair<string, string> kvp in task.GetVariables() )
+				{
+					variables[kvp.Key] = kvp.Value;
+				}
+
+				TaskList.Add( task );
 			}
 		}
 

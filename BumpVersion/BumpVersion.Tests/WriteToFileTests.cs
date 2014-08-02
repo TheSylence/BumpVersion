@@ -30,7 +30,7 @@ namespace BumpVersion.Tests
 					{"files", "exception.txt"}
 				};
 
-				WriteToFile task = new WriteToFile( settings );
+				WriteToFile task = new WriteToFile( settings, new Dictionary<string, string>() );
 				OperationResult result = task.Bump( new Version( 1, 0 ) );
 
 				Assert.IsFalse( result.IsSuccess );
@@ -45,7 +45,7 @@ namespace BumpVersion.Tests
 			{
 				{"files", "out1.txt;out2.txt"}
 			};
-			WriteToFile task = new WriteToFile( settings );
+			WriteToFile task = new WriteToFile( settings, new Dictionary<string, string>() );
 			OperationResult result = task.Bump( new Version( 1, 0 ) );
 
 			Assert.IsTrue( result.IsSuccess );
@@ -61,21 +61,21 @@ namespace BumpVersion.Tests
 		public void ValidateTest()
 		{
 			Dictionary<string, string> settings = new Dictionary<string, string>();
-			WriteToFile task = new WriteToFile( settings );
+			WriteToFile task = new WriteToFile( settings, new Dictionary<string, string>() );
 			OperationResult validation = task.Validate();
 
 			Assert.IsFalse( validation.IsSuccess );
 			Assert.IsTrue( validation.ToString( true ).Contains( "No files given" ) );
 
 			settings["files"] = string.Empty;
-			task = new WriteToFile( settings );
+			task = new WriteToFile( settings, new Dictionary<string, string>() );
 			validation = task.Validate();
 
 			Assert.IsFalse( validation.IsSuccess );
 			Assert.IsTrue( validation.ToString( true ).Contains( "No files given" ) );
 
 			settings["files"] = "out.txt";
-			task = new WriteToFile( settings );
+			task = new WriteToFile( settings, new Dictionary<string, string>() );
 			validation = task.Validate();
 
 			Assert.IsTrue( validation.IsSuccess );

@@ -29,7 +29,8 @@ Now if you want to bump the version of your project to 1.2 you would call bumpve
 A project file may contain as many tasks as you want to.
 For every task you need to add a `Task`-element to your project file.
 Also you have to specify what type the task is by providing a `type`-attribute to the element.
-If the tasks requires further configuration you can add these configurations by putting `key`-elements inside
+If the tasks requires further configuration you can add these configurations by putting `key`-elements inside the task.
+The `key`-element needs a `name`-attribute and a `value`-attribute.
 
 ## WriteToFile
 
@@ -38,6 +39,15 @@ To use it in your project add a `<Task type="WriteToFile">` to your project file
 
 You need to specify all files the version should be written to by adding a `<key name="files" value="file1;file2;file3;...;fileN" />` inside the element.
 You don't have to specify more than one file but if you do, you need to separate each file with a semicolon.
+
+## WixProductID
+
+Generates a new ProductID in a WiX project file. This is useful if you want to create an installer that
+can update previous installations.
+To use it in your project add a `<Task type=WixProductID>` to your project file.
+
+Add a `<key name="wixFile" value="your_wix_project.wxs" />` inside the element.
+
 
 ===========
 More tasks are to follow!

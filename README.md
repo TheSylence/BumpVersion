@@ -35,19 +35,32 @@ The `key`-element needs a `name`-attribute and a `value`-attribute.
 ## WriteToFile
 
 Writes the version number to a file (will overwrite any content the file already has).
-To use it in your project add a `<Task type="WriteToFile">` to your project file.
 
-You need to specify all files the version should be written to by adding a `<key name="files" value="file1;file2;file3;...;fileN" />` inside the element.
-You don't have to specify more than one file but if you do, you need to separate each file with a semicolon.
+Key | Description | Required?
+--- | ------------ | ----------
+files | List of files the version number should be written to. | Yes
+
 
 ## WixProductID
 
 Generates a new ProductID in a WiX project file. This is useful if you want to create an installer that
 can update previous installations.
-To use it in your project add a `<Task type=WixProductID>` to your project file.
 
-Add a `<key name="wixFile" value="your_wix_project.wxs" />` inside the element.
+Key | Description | Required?
+--- | ------------ | ----------
+wixFile | Name of the WiX project file that should be updated. | Yes
 
+
+## ReadVSProject
+
+Reads files from a Visual Studio Project file and stores them in a variable. This is useful if you want to
+apply some operations to a whole bunch of files that are part of a Visual Studio project.
+
+Key | Description | Required?
+--- | ------------ | ----------
+projectFile | Name of the project file that should be parsed. | Yes
+output | Name of the variable the parsed files will be stored in. | Yes
+elements | List of elements that should be searched for when parsing the project. | No (default is *Compile*, *Page* and *None*)
 
 ===========
 More tasks are to follow!

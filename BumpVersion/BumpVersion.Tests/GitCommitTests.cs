@@ -31,13 +31,16 @@ namespace BumpVersion.Tests
 				OperationResult result = task.Bump( new Version( 1, 0 ), new Version( 1, 1 ) );
 				Assert.IsFalse( result.IsSuccess );
 				Assert.IsTrue( result.Errors.Contains( "git.exe not found in PATH" ) );
+			}
 
+			using( ShimsContext.Create() )
+			{
 				System.Diagnostics.Fakes.ShimProcess.StartProcessStartInfo = ( inf ) =>
 				{
 					throw new Exception( "test exception" );
 				};
 
-				result = task.Bump( new Version( 1, 0 ), new Version( 1, 1 ) );
+				OperationResult result = task.Bump( new Version( 1, 0 ), new Version( 1, 1 ) );
 				Assert.IsFalse( result.IsSuccess );
 				Assert.IsTrue( result.Errors.Any( e => e.StartsWith( "Failed to execute git commit: System.Exception: test exception" ) ) );
 			}

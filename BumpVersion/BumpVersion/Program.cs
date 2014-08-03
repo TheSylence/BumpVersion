@@ -14,27 +14,28 @@ namespace BumpVersion
 		{
 			Console.Error.NewLine = Environment.NewLine;
 
-			if( args.Length < 1 || args.Length > 2 )
+			CommandLineParser cmdParser = new CommandLineParser( args );
+			if( !cmdParser.IsValid )
 			{
-				PrintUsage();
+				cmdParser.PrintUsage();
 				Environment.ExitCode = 0;
 				return;
 			}
 
 			// Parse given version
 			Version newVersion;
-			if( !Version.TryParse( args[0], out newVersion ) )
+			if( !Version.TryParse( cmdParser.Version, out newVersion ) )
 			{
-				Console.Error.WriteLine( "Version '{0}' is not a valid version", args[0] );
+				Console.Error.WriteLine( "Version '{0}' is not a valid version", cmdParser.Version );
 				Environment.ExitCode = -3;
 				return;
 			}
 
 			// Set project file to load
 			string projectFile = "bumpversion.xml";
-			if( args.Length == 2 )
+			if( cmdParser.ProjectFile != null )
 			{
-				projectFile = args[1];
+				projectFile = cmdParser.ProjectFile;
 			}
 
 			// Load project
@@ -75,15 +76,6 @@ namespace BumpVersion
 
 			Console.WriteLine( "Successfully bumped version to {0}", newVersion );
 			Environment.ExitCode = 0;
-		}
-
-		private static void PrintUsage()
-		{
-			Console.WriteLine( "BumpVersion {0} by Matthias Specht", Assembly.GetExecutingAssembly().GetName().Version );
-			Console.WriteLine( "Usage: {0} VERSION [PROJECT_FILE=bumpversion.xml]", Environment.GetCommandLineArgs()[0] );
-			Console.WriteLine();
-			Console.WriteLine( "VERSION:      The version to bump to" );
-			Console.WriteLine( "PROJECT_FILE: The project file to load. Defaults to 'bumpversion.xml'" );
 		}
 	}
 }

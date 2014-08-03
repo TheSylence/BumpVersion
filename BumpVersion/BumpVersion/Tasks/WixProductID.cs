@@ -10,10 +10,6 @@ using System.Xml;
 
 namespace BumpVersion.Tasks
 {
-	/// <summary>
-	/// Task that generates a new Product-ID inside a WiX-Project.
-	/// This is useful for generating an installer that can update previous installations.
-	/// </summary>
 	internal class WixNamespaceManager : XmlNamespaceManager
 	{
 		public const string Namespace = "http://schemas.microsoft.com/wix/2006/wi";
@@ -26,6 +22,10 @@ namespace BumpVersion.Tasks
 		}
 	}
 
+	/// <summary>
+	/// Task that generates a new Product-ID inside a WiX-Project.
+	/// This is useful for generating an installer that can update previous installations.
+	/// </summary>
 	internal class WixProductID : BumpTask
 	{
 		private const string FileKey = "wixFile";

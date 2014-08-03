@@ -49,15 +49,15 @@ namespace BumpVersion.Tests
 			OperationResult validation = task.Validate();
 
 			Assert.IsFalse( validation.IsSuccess );
-			Assert.IsTrue( validation.ToString( true ).Contains( "No name given" ) );
-			Assert.IsTrue( validation.ToString( true ).Contains( "No value given" ) );
+			Assert.IsTrue( validation.Errors.Contains( "No name given" ) );
+			Assert.IsTrue( validation.Errors.Contains( "No value given" ) );
 
 			settings.Add( "name", "name" );
 			task = new CreateVariable( settings, variables );
 			validation = task.Validate();
 			Assert.IsFalse( validation.IsSuccess );
-			Assert.IsFalse( validation.ToString( true ).Contains( "No name given" ) );
-			Assert.IsTrue( validation.ToString( true ).Contains( "No value given" ) );
+			Assert.IsFalse( validation.Errors.Contains( "No name given" ) );
+			Assert.IsTrue( validation.Errors.Contains( "No value given" ) );
 
 			settings.Add( "value", "123" );
 			task = new CreateVariable( settings, variables );

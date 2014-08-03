@@ -65,14 +65,14 @@ namespace BumpVersion.Tests
 			OperationResult validation = task.Validate();
 
 			Assert.IsFalse( validation.IsSuccess );
-			Assert.IsTrue( validation.ToString( true ).Contains( "No files given" ) );
+			Assert.IsTrue( validation.Errors.Contains( "No files given" ) );
 
 			settings["files"] = string.Empty;
 			task = new WriteToFile( settings, new Dictionary<string, string>() );
 			validation = task.Validate();
 
 			Assert.IsFalse( validation.IsSuccess );
-			Assert.IsTrue( validation.ToString( true ).Contains( "No files given" ) );
+			Assert.IsTrue( validation.Errors.Contains( "No files given" ) );
 
 			settings["files"] = "out.txt";
 			task = new WriteToFile( settings, new Dictionary<string, string>() );

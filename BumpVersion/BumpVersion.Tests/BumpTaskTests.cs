@@ -26,11 +26,11 @@ namespace BumpVersion.Tests
 
 			MockTask task = new MockTask( settings, variables );
 
-			Assert.AreEqual( "value", task.GetValueWrapper( "key" ) );
-			Assert.AreEqual( "value_var", task.GetValueWrapper( "var" ) );
+			Assert.AreEqual( "value", task.GetValue( "key" ) );
+			Assert.AreEqual( "value_var", task.GetValue( "var" ) );
 
-			Assert.IsNull( task.GetValueWrapper( "non existing key" ) );
-			Assert.IsNull( task.GetValueWrapper( "test" ) );
+			Assert.IsNull( task.GetValue( "non existing key" ) );
+			Assert.IsNull( task.GetValue( "test" ) );
 		}
 	}
 
@@ -44,11 +44,6 @@ namespace BumpVersion.Tests
 		public override OperationResult Bump( Version oldVersion, Version newVersion )
 		{
 			throw new NotImplementedException();
-		}
-
-		public string GetValueWrapper( string key )
-		{
-			return GetValue( key );
 		}
 
 		public override OperationResult Validate()

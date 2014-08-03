@@ -85,7 +85,7 @@ namespace BumpVersion.Tests
 			OperationResult validation = task.Validate();
 
 			Assert.IsFalse( validation.IsSuccess );
-			Assert.IsTrue( validation.ToString( true ).Contains( "No project file specified" ) );
+			Assert.IsTrue( validation.Errors.Contains( "No project file specified" ) );
 
 			File.Delete( "test.csproj" );
 			settings.Add( "projectFile", "test.csproj" );
@@ -93,17 +93,17 @@ namespace BumpVersion.Tests
 			validation = task.Validate();
 
 			Assert.IsFalse( validation.IsSuccess );
-			Assert.IsTrue( validation.ToString( true ).Contains( "File 'test.csproj' does not exist" ) );
+			Assert.IsTrue( validation.Errors.Contains( "File 'test.csproj' does not exist" ) );
 
 			File.WriteAllText( "test.csproj", TestData.SimpleVSProject );
 			task = new ReadVSProject( settings, variables );
 			validation = task.Validate();
 
 			Assert.IsFalse( validation.IsSuccess );
-			Assert.IsTrue( validation.ToString( true ).Contains( "No output variable defined" ) );
+			Assert.IsTrue( validation.Errors.Contains( "No output variable defined" ) );
 
 			// Reading files is tested in another test so we just check if the message is present
-			Assert.IsTrue( validation.ToString( true ).Contains( "No files found in Visual Studio project" ) );
+			Assert.IsTrue( validation.Errors.Contains( "No files found in Visual Studio project" ) );
 		}
 	}
 }

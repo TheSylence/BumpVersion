@@ -59,14 +59,14 @@ namespace BumpVersion.Tests
 			OperationResult validation = task.Validate();
 
 			Assert.IsFalse( validation.IsSuccess );
-			Assert.IsTrue( validation.ToString( true ).Contains( "No files given" ) );
+			Assert.IsTrue( validation.Errors.Contains( "No files given" ) );
 
 			settings["wixFile"] = string.Empty;
 			task = new WixProductID( settings, new Dictionary<string, string>() );
 			validation = task.Validate();
 
 			Assert.IsFalse( validation.IsSuccess );
-			Assert.IsTrue( validation.ToString( true ).Contains( "No files given" ) );
+			Assert.IsTrue( validation.Errors.Contains( "No files given" ) );
 
 			settings["wixFile"] = "test.wxs";
 			task = new WixProductID( settings, new Dictionary<string, string>() );
@@ -74,7 +74,7 @@ namespace BumpVersion.Tests
 			validation = task.Validate();
 
 			Assert.IsFalse( validation.IsSuccess );
-			Assert.IsTrue( validation.ToString( true ).Contains( "WiX file 'test.wxs' does not exist" ) );
+			Assert.IsTrue( validation.Errors.Contains( "WiX file 'test.wxs' does not exist" ) );
 
 			File.WriteAllText( "test.wxs", "test" );
 			validation = task.Validate();

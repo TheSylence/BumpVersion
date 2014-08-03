@@ -43,6 +43,14 @@ Key | Description | Required?
 name | Name of the variable to create | Yes
 value | Value of the variable | Yes
 
+## GitCommit
+
+Commits changes to a git repository.
+
+Key | Description | Required?
+--- | ------------ | ----------
+message | The message to use while committing. | No (default is "Bump version to {0}"). Omitting the {0} token will result in a warning.
+
 ## ReadVSProject
 
 Reads files from a Visual Studio Project file and stores them in a variable. This is useful if you want to

@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -50,12 +51,20 @@ namespace BumpVersion.Tasks
 		/// <returns>An instance of the <see cref="OperationResult"/> class containing the validation result</returns>
 		public abstract OperationResult Validate();
 
+		protected internal string GetFullPathFromEnvironment( string exe )
+		{
+			string enviromentPath = System.Environment.GetEnvironmentVariable( "PATH" );
+
+			string[] paths = enviromentPath.Split( ';' );
+			return paths.Select( x => Path.Combine( x, exe ) ).Where( x => File.Exists( x ) ).FirstOrDefault();
+		}
+
 		/// <summary>
 		/// Reads the value of a setting key taking variables into account
 		/// </summary>
 		/// <param name="settingKey">The key to read</param>
 		/// <returns>The effective value of the key or <c>null</c> if the key could not be found</returns>
-		protected string GetValue( string settingKey )
+		protected internal string GetValue( string settingKey )
 		{
 			string value;
 			if( !Settings.TryGetValue( settingKey, out value ) )

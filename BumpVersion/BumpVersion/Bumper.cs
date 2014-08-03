@@ -11,6 +11,9 @@ using BumpVersion.Tasks;
 
 namespace BumpVersion
 {
+	/// <summary>
+	/// The bumper that loads a project file and can execute the tasks defined in it.
+	/// </summary>
 	public class Bumper
 	{
 		private Version CurrentVersion;
@@ -23,6 +26,11 @@ namespace BumpVersion
 			ParseFile( fileName );
 		}
 
+		/// <summary>
+		/// Does the actual bumping by executiing all loaded tasks.
+		/// </summary>
+		/// <param name="newVersion">The version to bump to</param>
+		/// <returns>Result of all executed tasks</returns>
 		public OperationResult Bump( Version newVersion )
 		{
 			OperationResult result = new OperationResult();
@@ -35,6 +43,11 @@ namespace BumpVersion
 			return result;
 		}
 
+		/// <summary>
+		/// Saves the current version to the project file
+		/// </summary>
+		/// <param name="fileName">Path of the project file</param>
+		/// <param name="version">The version to save</param>
 		public void SaveCurrentVersion( string fileName, Version version )
 		{
 			XmlDocument doc = new XmlDocument();

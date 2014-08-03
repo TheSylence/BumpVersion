@@ -51,12 +51,17 @@ namespace BumpVersion.Tasks
 		/// <returns>An instance of the <see cref="OperationResult"/> class containing the validation result</returns>
 		public abstract OperationResult Validate();
 
+		/// <summary>
+		/// Searches for a file in all folders defined in the PATH environment variable.
+		/// </summary>
+		/// <param name="exe">The file to search for</param>
+		/// <returns>The full path of the found file or an empty string if not found</returns>
 		protected internal string GetFullPathFromEnvironment( string exe )
 		{
 			string enviromentPath = System.Environment.GetEnvironmentVariable( "PATH" );
 
 			string[] paths = enviromentPath.Split( ';' );
-			return paths.Select( x => Path.Combine( x, exe ) ).Where( x => File.Exists( x ) ).FirstOrDefault();
+			return paths.Select( x => Path.Combine( x, exe ) ).FirstOrDefault( x => File.Exists( x ) );
 		}
 
 		/// <summary>

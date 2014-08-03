@@ -10,6 +10,9 @@ using System.Threading.Tasks;
 
 namespace BumpVersion.Tasks
 {
+	/// <summary>
+	/// Commits changes to a git repository.
+	/// </summary>
 	internal class GitCommit : BumpTask
 	{
 		public GitCommit( Dictionary<string, string> settings, Dictionary<string, string> variables )
@@ -40,15 +43,17 @@ namespace BumpVersion.Tasks
 			{
 				result.AddError( "git.exe not found in PATH" );
 			}
-
-			try
+			else
 			{
-				Process proc = Process.Start( inf );
-				proc.WaitForExit();
-			}
-			catch( Exception ex )
-			{
-				result.AddError( string.Format( "Failed to execute git commit: {0}", ex ) );
+				try
+				{
+					Process proc = Process.Start( inf );
+					proc.WaitForExit();
+				}
+				catch( Exception ex )
+				{
+					result.AddError( string.Format( "Failed to execute git commit: {0}", ex ) );
+				}
 			}
 
 			return result;

@@ -60,6 +60,7 @@
   <ItemGroup>
     <Compile Include="BumperTests.cs" />
     <Compile Include="BumpTaskTests.cs" />
+    <Compile Include="CreateVariableTests.cs" />
     <Compile Include="OperationResultTests.cs" />
     <Compile Include="ProgramTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

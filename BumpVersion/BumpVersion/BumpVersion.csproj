@@ -46,6 +46,7 @@
     <Compile Include="Tasks\BumpTask.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tasks\CreateVariable.cs" />
     <Compile Include="Tasks\ReadVSProject.cs" />
     <Compile Include="Tasks\ReplaceInFile.cs" />
     <Compile Include="Tasks\WriteToFile.cs" />

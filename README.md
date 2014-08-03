@@ -62,5 +62,14 @@ projectFile | Name of the project file that should be parsed. | Yes
 output | Name of the variable the parsed files will be stored in. | Yes
 elements | List of elements that should be searched for when parsing the project. | No (default is *Compile*, *Page* and *None*)
 
+## CreateVariable
+
+Creates a variable with a given name and value that can be used in other tasks.
+
+Key | Description | Required?
+--- | ------------ | ----------
+name | Name of the variable to create | Yes
+value | Value of the variable | Yes
+
 ===========
 More tasks are to follow!

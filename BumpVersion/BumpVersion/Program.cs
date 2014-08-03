@@ -50,6 +50,8 @@ namespace BumpVersion
 				return;
 			}
 
+			// TODO: Check that new and old version are different
+
 			// Validate project
 			OperationResult validationResult = bumper.Vaildate();
 			if( !validationResult.IsSuccess )

@@ -2,9 +2,11 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace BumpVersion.Tasks
 {
@@ -30,10 +32,38 @@ namespace BumpVersion.Tasks
 		{
 			Dictionary<string, string> variables = new Dictionary<string, string>();
 
-			string projectFile = GetValue( "projectFile" );
-			if( projectFile != null )
+			string[] elementsToSearch = new[]
 			{
-				// TODO: Parse project file
+				"Compile", "Page", "None"
+			};
+
+			string elements = GetValue( "elements" );
+			if( elements != null )
+			{
+				elementsToSearch = elements.Split( ';' );
+			}
+
+			string projectFile = GetValue( "projectFile" );
+			string outputVar = GetValue( "output" );
+			if( projectFile != null && outputVar != null )
+			{
+				string basePath = Path.GetDirectoryName( projectFile );
+
+				XmlDocument doc = new XmlDocument();
+				doc.Load( projectFile );
+
+				foreach( XmlElement itemGroup in doc.DocumentElement.GetElementsByTagName( "ItemGroup" ) )
+				{
+					foreach( string element in elementsToSearch )
+					{
+						foreach( XmlElement item in itemGroup.GetElementsByTagName( element ) )
+						{
+							Files.Add( Path.Combine( basePath, item.GetAttribute( "Include" ) ) );
+						}
+					}
+				}
+
+				variables.Add( outputVar, string.Join( ";", Files ) );
 			}
 
 			return variables;
@@ -42,9 +72,19 @@ namespace BumpVersion.Tasks
 		public override OperationResult Validate()
 		{
 			OperationResult result = new OperationResult();
-			if( GetValue( "projectFile" ) == null )
+			string projectFile = GetValue( "projectFile" );
+			if( projectFile == null )
 			{
 				result.AddError( "No project file specified" );
+			}
+			else if( !File.Exists( projectFile ) )
+			{
+				result.AddError( string.Format( "File '{0}' does not exist", projectFile ) );
+			}
+
+			if( GetValue( "output" ) == null )
+			{
+				result.AddError( "No output variable defined" );
 			}
 
 			if( Files.Count == 0 )

@@ -53,6 +53,56 @@ namespace BumpVersion.Tests
 			}
 		}
 
+		internal static string SimpleVSProject
+		{
+			get
+			{
+				StringBuilder sb = new StringBuilder();
+
+				sb.AppendLine( "<?xml version=\"1.0\" encoding=\"utf-8\"?>" );
+				sb.AppendLine( "<Project ToolsVersion=\"12.0\" DefaultTargets=\"Build\" xmlns=\"http://schemas.microsoft.com/developer/msbuild/2003\">" );
+				sb.AppendLine( "<Import Project=\"$(MSBuildExtensionsPath)\\$(MSBuildToolsVersion)\\Microsoft.Common.props\" Condition=\"Exists('$(MSBuildExtensionsPath)\\$(MSBuildToolsVersion)\\Microsoft.Common.props')\" />" );
+				sb.AppendLine( "<PropertyGroup Condition=\" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' \">" );
+				sb.AppendLine( "<PlatformTarget>AnyCPU</PlatformTarget>" );
+				sb.AppendLine( "</PropertyGroup>" );
+				sb.AppendLine( "<PropertyGroup Condition=\" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' \">" );
+				sb.AppendLine( "<PlatformTarget>AnyCPU</PlatformTarget>" );
+				sb.AppendLine( "</PropertyGroup>" );
+				sb.AppendLine( "<ItemGroup>" );
+				sb.AppendLine( "<Reference Include=\"System\" />" );
+				sb.AppendLine( "<Reference Include=\"System.Data\" />" );
+				sb.AppendLine( "<Reference Include=\"System.Drawing\" />" );
+				sb.AppendLine( "<Reference Include=\"System.Xaml\">" );
+				sb.AppendLine( "<RequiredTargetFramework>4.0</RequiredTargetFramework>" );
+				sb.AppendLine( "</Reference>" );
+				sb.AppendLine( "</ItemGroup>" );
+				sb.AppendLine( "<ItemGroup>" );
+				sb.AppendLine( "<Compile Include=\"Controls\\Window.xaml.cs\">" );
+				sb.AppendLine( "<DependentUpon>Window.xaml</DependentUpon>" );
+				sb.AppendLine( "</Compile>" );
+				sb.AppendLine( "<Page Include=\"Controls\\Window.xaml\">" );
+				sb.AppendLine( "<SubType>Designer</SubType>" );
+				sb.AppendLine( "<Generator>MSBuild:Compile</Generator>" );
+				sb.AppendLine( "</Page>" );
+				sb.AppendLine( "</ItemGroup>" );
+				sb.AppendLine( "<ItemGroup>" );
+				sb.AppendLine( "<None Include=\"Properties\\Version.txt\" />" );
+				sb.AppendLine( "<Resource Include=\"Properties\\Resource.res\" />" );
+				sb.AppendLine( "<EmbeddedResource Include=\"Properties\\Resources.resx\">" );
+				sb.AppendLine( "<Generator>PublicResXFileCodeGenerator</Generator>" );
+				sb.AppendLine( "<LastGenOutput>Resources.Designer.cs</LastGenOutput>" );
+				sb.AppendLine( "</EmbeddedResource>" );
+				sb.AppendLine( "</ItemGroup>" );
+				sb.AppendLine( "<ItemGroup>" );
+				sb.AppendLine( "<None Include=\"App.config\" />" );
+				sb.AppendLine( "</ItemGroup>" );
+				sb.AppendLine( "<Import Project=\"$(MSBuildToolsPath)\\Microsoft.CSharp.targets\" />" );
+				sb.AppendLine( "</Project>" );
+
+				return sb.ToString();
+			}
+		}
+
 		internal static string UnknownTypeContent
 		{
 			get

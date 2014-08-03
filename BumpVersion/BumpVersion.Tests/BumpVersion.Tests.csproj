@@ -43,6 +43,7 @@
     <Reference Include="System.4.0.0.0.Fakes">
       <HintPath>FakesAssemblies\System.4.0.0.0.Fakes.dll</HintPath>
     </Reference>
+    <Reference Include="System.XML" />
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -58,6 +59,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="BumperTests.cs" />
+    <Compile Include="BumpTaskTests.cs" />
     <Compile Include="OperationResultTests.cs" />
     <Compile Include="ProgramTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

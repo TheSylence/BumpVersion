@@ -31,7 +31,7 @@ namespace BumpVersion.Tests
 				};
 
 				WriteToFile task = new WriteToFile( settings, new Dictionary<string, string>() );
-				OperationResult result = task.Bump( new Version( 1, 0 ) );
+				OperationResult result = task.Bump( new Version(), new Version( 1, 0 ) );
 
 				Assert.IsFalse( result.IsSuccess );
 				Assert.IsTrue( result.ToString( true ).Contains( "test exception" ) );
@@ -46,7 +46,7 @@ namespace BumpVersion.Tests
 				{"files", "out1.txt;out2.txt"}
 			};
 			WriteToFile task = new WriteToFile( settings, new Dictionary<string, string>() );
-			OperationResult result = task.Bump( new Version( 1, 0 ) );
+			OperationResult result = task.Bump( new Version(), new Version( 1, 0 ) );
 
 			Assert.IsTrue( result.IsSuccess );
 

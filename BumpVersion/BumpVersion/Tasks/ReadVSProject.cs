@@ -13,19 +13,46 @@ namespace BumpVersion.Tasks
 	/// </summary>
 	internal class ReadVSProject : BumpTask
 	{
+		private List<string> Files = new List<string>();
+
 		public ReadVSProject( Dictionary<string, string> settings, Dictionary<string, string> variables )
 			: base( settings, variables )
 		{
 		}
 
-		public override OperationResult Bump( Version newVersion )
+		public override OperationResult Bump( Version oldVersion, Version newVersion )
 		{
-			throw new NotImplementedException();
+			// There is no actual bumping to do here.
+			return new OperationResult();
+		}
+
+		public override Dictionary<string, string> GetVariables()
+		{
+			Dictionary<string, string> variables = new Dictionary<string, string>();
+
+			string projectFile = GetValue( "projectFile" );
+			if( projectFile != null )
+			{
+				// TODO: Parse project file
+			}
+
+			return variables;
 		}
 
 		public override OperationResult Validate()
 		{
-			throw new NotImplementedException();
+			OperationResult result = new OperationResult();
+			if( GetValue( "projectFile" ) == null )
+			{
+				result.AddError( "No project file specified" );
+			}
+
+			if( Files.Count == 0 )
+			{
+				result.AddError( "No files found in Visual Studio project" );
+			}
+
+			return result;
 		}
 	}
 }

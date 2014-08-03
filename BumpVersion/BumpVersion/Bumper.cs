@@ -13,6 +13,7 @@ namespace BumpVersion
 {
 	public class Bumper
 	{
+		private Version CurrentVersion;
 		private Dictionary<string, Type> KnownTasks;
 		private List<BumpTask> TaskList;
 
@@ -28,10 +29,18 @@ namespace BumpVersion
 
 			foreach( BumpTask task in TaskList )
 			{
-				result.Merge( task.Bump( newVersion ) );
+				result.Merge( task.Bump( CurrentVersion, newVersion ) );
 			}
 
 			return result;
+		}
+
+		public void SaveCurrentVersion( string fileName, Version version )
+		{
+			XmlDocument doc = new XmlDocument();
+			doc.Load( fileName );
+			doc.DocumentElement.SetAttribute( "currentVersion", version.ToString() );
+			doc.Save( fileName );
 		}
 
 		/// <summary>
@@ -62,6 +71,11 @@ namespace BumpVersion
 		{
 			XmlDocument doc = new XmlDocument();
 			doc.Load( fileName );
+
+			if( !Version.TryParse( doc.DocumentElement.GetAttribute( "currentVersion" ), out CurrentVersion ) )
+			{
+				CurrentVersion = new Version( 0, 0 );
+			}
 
 			XmlNodeList taskNodes = doc.DocumentElement.GetElementsByTagName( "task" );
 			// Yeah it's all about optimization ;)

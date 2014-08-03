@@ -25,7 +25,7 @@ namespace BumpVersion.Tests
 			};
 
 			WixProductID task = new WixProductID( settings, new Dictionary<string, string>() );
-			OperationResult result = task.Bump( new Version( 1, 0 ) );
+			OperationResult result = task.Bump( new Version(), new Version( 1, 0 ) );
 
 			Assert.IsFalse( result.IsSuccess );
 			Assert.IsTrue( result.ToString().Contains( "NullReferenceException" ) );
@@ -42,7 +42,7 @@ namespace BumpVersion.Tests
 			};
 
 			WixProductID task = new WixProductID( settings, new Dictionary<string, string>() );
-			OperationResult result = task.Bump( new Version( 1, 0 ) );
+			OperationResult result = task.Bump( new Version(), new Version( 1, 0 ) );
 
 			Assert.IsTrue( result.IsSuccess );
 

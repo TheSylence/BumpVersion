@@ -29,10 +29,11 @@ namespace BumpVersion.Tasks
 		/// <summary>
 		/// Called when a version should be bumped
 		/// </summary>
+		/// <param name="oldVersion">The current version</param>
 		/// <param name="newVersion">The version to bump to</param>
 		/// <returns>An instance of the <see cref="OperationResult"/> class containing all errors and warnings
 		/// that occured during bumping</returns>
-		public abstract OperationResult Bump( Version newVersion );
+		public abstract OperationResult Bump( Version oldVersion, Version newVersion );
 
 		/// <summary>
 		/// Returns a list of variables this task offers for other tasks

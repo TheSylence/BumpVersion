@@ -35,7 +35,7 @@ namespace BumpVersion.Tasks
 		{
 		}
 
-		public override OperationResult Bump( Version newVersion )
+		public override OperationResult Bump( Version oldVersion, Version newVersion )
 		{
 			OperationResult result = new OperationResult();
 			string wixFile = GetValue( FileKey );

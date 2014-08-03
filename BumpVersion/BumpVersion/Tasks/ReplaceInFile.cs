@@ -25,7 +25,7 @@ namespace BumpVersion.Tasks
 			Pattern = new Regex( @"(\d+\.\d+((\.\d+)?\.\d+)?)" );
 		}
 
-		public override OperationResult Bump( Version newVersion )
+		public override OperationResult Bump( Version oldVersion, Version newVersion )
 		{
 			OperationResult results = new OperationResult();
 			string[] files = GetValue( FileKey ).Split( ';' );

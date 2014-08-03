@@ -70,6 +70,9 @@ namespace BumpVersion
 				return;
 			}
 
+			// Write new version back to project file
+			bumper.SaveCurrentVersion( projectFile, newVersion );
+
 			Console.WriteLine( "Successfully bumped version to {0}", newVersion );
 			Environment.ExitCode = 0;
 		}

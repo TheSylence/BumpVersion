@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 using Microsoft.QualityTools.Testing.Fakes;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -89,6 +90,24 @@ namespace BumpVersion.Tests
 		}
 
 		[TestMethod]
+		public void SaveCurrentVersionTest()
+		{
+			try
+			{
+				File.WriteAllText( "saveVersion.xml", TestData.SimpleFileContent );
+
+				Bumper bumper = new Bumper( "saveVersion.xml" );
+				OperationResult result = bumper.Vaildate();
+
+				Assert.IsTrue( result.IsSuccess );
+			}
+			finally
+			{
+				File.Delete( "saveVersion.xml" );
+			}
+		}
+
+		[TestMethod]
 		public void SimpleValidateTest()
 		{
 			try
@@ -96,9 +115,11 @@ namespace BumpVersion.Tests
 				File.WriteAllText( "simpleValidate.xml", TestData.SimpleFileContent );
 
 				Bumper bumper = new Bumper( "simpleValidate.xml" );
-				OperationResult result = bumper.Vaildate();
+				bumper.SaveCurrentVersion( "simpleValidate.xml", new Version( 1, 2 ) );
 
-				Assert.IsTrue( result.IsSuccess );
+				XmlDocument doc = new XmlDocument();
+				doc.Load( "simpleValidate.xml" );
+				Assert.AreEqual( "1.2", doc.DocumentElement.GetAttribute( "currentVersion" ) );
 			}
 			finally
 			{

@@ -32,24 +32,16 @@ Also you have to specify what type the task is by providing a `type`-attribute t
 If the tasks requires further configuration you can add these configurations by putting `key`-elements inside the task.
 The `key`-element needs a `name`-attribute and a `value`-attribute.
 
-## WriteToFile
+The `value`-attribute either takes a normal value like `fileName` or `123` or a variable that was created by a task **prior** to the current one. To pass a variable use `@variable_name` as the value of the `value`-attribute.
 
-Writes the version number to a file (will overwrite any content the file already has).
+## CreateVariable
 
-Key | Description | Required?
---- | ------------ | ----------
-files | List of files the version number should be written to. | Yes
-
-
-## WixProductID
-
-Generates a new ProductID in a WiX project file. This is useful if you want to create an installer that
-can update previous installations.
+Creates a variable with a given name and value that can be used in other tasks.
 
 Key | Description | Required?
 --- | ------------ | ----------
-wixFile | Name of the WiX project file that should be updated. | Yes
-
+name | Name of the variable to create | Yes
+value | Value of the variable | Yes
 
 ## ReadVSProject
 
@@ -62,14 +54,23 @@ projectFile | Name of the project file that should be parsed. | Yes
 output | Name of the variable the parsed files will be stored in. | Yes
 elements | List of elements that should be searched for when parsing the project. | No (default is *Compile*, *Page* and *None*)
 
-## CreateVariable
+## WixProductID
 
-Creates a variable with a given name and value that can be used in other tasks.
+Generates a new ProductID in a WiX project file. This is useful if you want to create an installer that
+can update previous installations.
 
 Key | Description | Required?
 --- | ------------ | ----------
-name | Name of the variable to create | Yes
-value | Value of the variable | Yes
+wixFile | Name of the WiX project file that should be updated. | Yes
+
+## WriteToFile
+
+Writes the version number to a file (will overwrite any content the file already has).
+
+Key | Description | Required?
+--- | ------------ | ----------
+files | List of files the version number should be written to. | Yes
+
 
 ===========
 More tasks are to follow!

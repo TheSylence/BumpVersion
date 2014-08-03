@@ -97,7 +97,7 @@ namespace BumpVersion.Tests
 				File.WriteAllText( "saveVersion.xml", TestData.SimpleFileContent );
 
 				Bumper bumper = new Bumper( "saveVersion.xml" );
-				OperationResult result = bumper.Vaildate();
+				OperationResult result = bumper.Vaildate( new Version( 1, 2 ) );
 
 				Assert.IsTrue( result.IsSuccess );
 			}
@@ -158,7 +158,7 @@ namespace BumpVersion.Tests
 				File.WriteAllText( "validate.xml", TestData.EmptyFileContent );
 
 				Bumper bumper = new Bumper( "validate.xml" );
-				OperationResult result = bumper.Vaildate();
+				OperationResult result = bumper.Vaildate( new Version( 2, 0 ) );
 
 				Assert.IsFalse( result.IsSuccess );
 				Assert.IsTrue( result.ToString( true ).Contains( "No tasks in project" ) );
@@ -166,6 +166,29 @@ namespace BumpVersion.Tests
 			finally
 			{
 				File.Delete( "validate.xml" );
+			}
+		}
+
+		[TestMethod]
+		public void ValidateVersionTest()
+		{
+			try
+			{
+				File.WriteAllText( "validateVersion.xml", TestData.SimpleFileContent );
+
+				Bumper bumper = new Bumper( "validateVersion.xml" );
+				OperationResult result = bumper.Vaildate( new Version( 0, 1 ) );
+
+				Assert.IsFalse( result.IsSuccess );
+				Assert.IsTrue( result.ToString( true ).Contains( "New version (0.1) must be greater than current version (0.1)" ) );
+
+				result = bumper.Vaildate( new Version( 0, 0, 1 ) );
+				Assert.IsFalse( result.IsSuccess );
+				Assert.IsTrue( result.ToString( true ).Contains( "New version (0.0.1) must be greater than current version (0.1)" ) );
+			}
+			finally
+			{
+				File.Delete( "validateVersion.xml" );
 			}
 		}
 	}

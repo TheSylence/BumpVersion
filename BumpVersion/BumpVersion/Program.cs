@@ -50,10 +50,8 @@ namespace BumpVersion
 				return;
 			}
 
-			// TODO: Check that new and old version are different
-
 			// Validate project
-			OperationResult validationResult = bumper.Vaildate();
+			OperationResult validationResult = bumper.Vaildate( newVersion );
 			if( !validationResult.IsSuccess )
 			{
 				Console.Error.WriteLine( "There are some errors in your project file" );

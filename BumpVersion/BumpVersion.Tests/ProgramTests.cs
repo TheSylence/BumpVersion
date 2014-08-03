@@ -15,6 +15,26 @@ namespace BumpVersion.Tests
 	public class ProgramTests
 	{
 		[TestMethod]
+		public void CompleteTest()
+		{
+			File.WriteAllText( "bumpversion_complete.xml", TestData.CompleteTestContent );
+
+			using( StringWriter sw = new StringWriter() )
+			{
+				Console.SetOut( sw );
+
+				Program.Main( new string[] { "1.0", "bumpversion_complete.xml" } );
+
+				string actual = sw.ToString();
+				Assert.IsTrue( actual.Contains( "Successfully bumped version to 1.0" ) );
+				Assert.AreEqual( 0, Environment.ExitCode );
+
+				Assert.AreEqual( "1.0", File.ReadAllText( "out1.txt" ) );
+				Assert.AreEqual( "1.0", File.ReadAllText( "out2.txt" ) );
+			}
+		}
+
+		[TestMethod]
 		public void FailedBumpTest()
 		{
 			File.WriteAllText( "bumpversion_fail.xml", TestData.SimpleFileContent );

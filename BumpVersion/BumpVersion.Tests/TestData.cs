@@ -10,6 +10,26 @@ namespace BumpVersion.Tests
 {
 	internal static class TestData
 	{
+		internal static string CompleteTestContent
+		{
+			get
+			{
+				StringBuilder sb = new StringBuilder();
+				sb.AppendLine( "<?xml version=\"1.0\"?>" );
+				sb.AppendLine( "<bumpversion currentVersion=\"0.1\">" );
+				sb.AppendLine( "<task type=\"CreateVariable\">" );
+				sb.AppendLine( "<key name=\"name\" value=\"files\" />" );
+				sb.AppendLine( "<key name=\"value\" value=\"out1.txt;out2.txt\" />" );
+				sb.AppendLine( "</task>" );
+				sb.AppendLine( "<task type=\"WriteToFile\">" );
+				sb.AppendLine( "<key name=\"files\" value=\"@files\" />" );
+				sb.AppendLine( "</task>" );
+				sb.AppendLine( "</bumpversion>" );
+
+				return sb.ToString();
+			}
+		}
+
 		internal static string EmptyFileContent
 		{
 			get
@@ -43,7 +63,7 @@ namespace BumpVersion.Tests
 			{
 				StringBuilder sb = new StringBuilder();
 				sb.AppendLine( "<?xml version=\"1.0\"?>" );
-				sb.AppendLine( "<bumpversion>" );
+				sb.AppendLine( "<bumpversion currentVersion=\"0.1\">" );
 				sb.AppendLine( "<task type=\"WriteToFile\">" );
 				sb.AppendLine( "<key name=\"files\" value=\"out.txt\" />" );
 				sb.AppendLine( "</task>" );

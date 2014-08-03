@@ -47,12 +47,17 @@ namespace BumpVersion
 		/// Validates the project and all containing tasks.
 		/// </summary>
 		/// <returns>The validation result</returns>
-		public OperationResult Vaildate()
+		public OperationResult Vaildate( Version newVersion )
 		{
 			OperationResult result = new OperationResult();
 			if( TaskList.Count == 0 )
 			{
 				result.AddError( "No tasks in project" );
+			}
+
+			if( newVersion <= CurrentVersion )
+			{
+				result.AddError( string.Format( "New version ({0}) must be greater than current version ({1})", newVersion, CurrentVersion ) );
 			}
 
 			foreach( BumpTask task in TaskList )

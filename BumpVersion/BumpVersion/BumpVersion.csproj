@@ -49,7 +49,6 @@
     <Compile Include="Tasks\CreateVariable.cs" />
     <Compile Include="Tasks\GitCommit.cs" />
     <Compile Include="Tasks\ReadVSProject.cs" />
-    <Compile Include="Tasks\ReplaceInFile.cs" />
     <Compile Include="Tasks\WriteToFile.cs" />
     <Compile Include="OperationResult.cs" />
     <Compile Include="Tasks\WixProductID.cs" />

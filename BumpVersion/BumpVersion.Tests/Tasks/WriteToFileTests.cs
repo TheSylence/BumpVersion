@@ -10,7 +10,7 @@ using BumpVersion.Tasks;
 using Microsoft.QualityTools.Testing.Fakes;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace BumpVersion.Tests
+namespace BumpVersion.Tests.Tasks
 {
 	[TestClass]
 	public class WriteToFileTests

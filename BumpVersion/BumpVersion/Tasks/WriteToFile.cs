@@ -23,7 +23,7 @@ namespace BumpVersion.Tasks
 
 		public override OperationResult Bump( Version oldVersion, Version newVersion )
 		{
-			OperationResult results = new OperationResult();
+			OperationResult result = new OperationResult();
 			string[] files = GetValue( FileKey ).Split( ';' );
 
 			foreach( string fileName in files )
@@ -34,11 +34,11 @@ namespace BumpVersion.Tasks
 				}
 				catch( IOException ex )
 				{
-					results.AddError( string.Format( "{0} => {1}", fileName, ex ) );
+					result.AddError( string.Format( "{0} => {1}", fileName, ex ) );
 				}
 			}
 
-			return results;
+			return result;
 		}
 
 		public override OperationResult Validate()

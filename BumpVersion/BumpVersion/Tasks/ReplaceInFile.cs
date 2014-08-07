@@ -17,6 +17,7 @@ namespace BumpVersion.Tasks
 	{
 		private const string FileKey = "files";
 		private const string SearchKey = "search";
+		private const string ReplacementKey = "replace";
 
 		public ReplaceInFile( Dictionary<string, string> settings, Dictionary<string, string> variables )
 			: base( settings, variables )
@@ -27,16 +28,26 @@ namespace BumpVersion.Tasks
 		{
 			OperationResult result = new OperationResult();
 
+			string versionPattern = Regex.Escape( oldVersion.ToString() );
+			//string replacement = newVersion.ToString();
+			string replacement = GetValue( ReplacementKey );
+			if( replacement == null )
+			{
+				replacement = string.Format( "{0}$2", newVersion );
+			}
+			else
+			{
+				replacement = string.Format( replacement, newVersion );
+			}
+
 			string pattern = GetValue( SearchKey );
 			if( pattern == null )
 			{
-				string[] parts = oldVersion.ToString().Split( '.' );
-				for( int i = 0; i < parts.Length; ++i )
-				{
-					parts[i] = "\\d+";
-				}
-
-				pattern = string.Format( "({0})", string.Join( ".", parts ) );
+				pattern = string.Format( "\\b({0})\\b([^\\.]){{1}}", versionPattern );
+			}
+			else
+			{
+				pattern = string.Format( pattern, versionPattern );
 			}
 			Regex regex = new Regex( pattern );
 
@@ -47,7 +58,7 @@ namespace BumpVersion.Tasks
 				{
 					string content = File.ReadAllText( file );
 
-					regex.Replace( content, newVersion.ToString() );
+					content = regex.Replace( content, replacement );
 
 					File.WriteAllText( file, content );
 				}

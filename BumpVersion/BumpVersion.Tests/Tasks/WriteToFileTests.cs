@@ -12,6 +12,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace BumpVersion.Tests.Tasks
 {
+	[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
 	[TestClass]
 	public class WriteToFileTests
 	{

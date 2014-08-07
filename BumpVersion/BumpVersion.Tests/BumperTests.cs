@@ -13,6 +13,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace BumpVersion.Tests
 {
+	[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
 	[TestClass]
 	public class BumperTests
 	{

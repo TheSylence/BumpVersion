@@ -10,6 +10,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace BumpVersion.Tests.Tasks
 {
+	[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
 	[TestClass]
 	public class BumpTaskTests
 	{
@@ -34,6 +35,7 @@ namespace BumpVersion.Tests.Tasks
 		}
 	}
 
+	[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
 	internal class MockTask : BumpTask
 	{
 		public MockTask( Dictionary<string, string> settings, Dictionary<string, string> variables )

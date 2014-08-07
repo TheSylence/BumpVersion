@@ -9,8 +9,9 @@ using System.Threading.Tasks;
 using BumpVersion.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace BumpVersion.Tests
+namespace BumpVersion.Tests.Tasks
 {
+	[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
 	[TestClass]
 	public class ReadVSProjectTests
 	{

@@ -8,8 +8,9 @@ using System.Threading.Tasks;
 using BumpVersion.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace BumpVersion.Tests
+namespace BumpVersion.Tests.Tasks
 {
+	[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
 	[TestClass]
 	public class BumpTaskTests
 	{
@@ -34,6 +35,7 @@ namespace BumpVersion.Tests
 		}
 	}
 
+	[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
 	internal class MockTask : BumpTask
 	{
 		public MockTask( Dictionary<string, string> settings, Dictionary<string, string> variables )

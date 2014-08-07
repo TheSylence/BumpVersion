@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace BumpVersion.Tests
 {
+	[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
 	internal static class TestData
 	{
 		internal static string CompleteTestContent

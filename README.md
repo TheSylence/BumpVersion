@@ -62,6 +62,16 @@ projectFile | Name of the project file that should be parsed. | Yes
 output | Name of the variable the parsed files will be stored in. | Yes
 elements | List of elements that should be searched for when parsing the project. | No (default is *Compile*, *Page* and *None*)
 
+## ReplaceInFile
+
+Replaces all occurrences in the given files of the current version with the one being bumped to.
+
+Key | Description | Required?
+--- | ------------ | ----------
+files | List of files that should be searched | Yes
+search | The regular expression to to search for | No (default is `\b(OLD_VERSION)\b([^\.]){1}` with `OLD_VERSION` being the regex-escaped value of the old version. So for 1.2.3 this would be 1\.2\.3
+replace | The value used to replace all found occurrences | No (default is `NEW_VERSION$2`with `NEW_VERSION` being the version you bump to.
+
 ## WixProductID
 
 Generates a new ProductID in a WiX project file. This is useful if you want to create an installer that

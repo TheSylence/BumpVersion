@@ -1,4 +1,22 @@
-﻿// $Id$
+﻿// Copyright (c) 2014 Matthias Specht
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
 
 using System;
 using System.Collections.Generic;
@@ -10,43 +28,65 @@ using System.Threading.Tasks;
 
 namespace BumpVersion.Tasks
 {
-#if false
 	/// <summary>
-	/// Task that replaces version strings in given files.
+	/// Task that replaces all occurrences of a token in files.
 	/// </summary>
 	internal class ReplaceInFile : BumpTask
 	{
 		private const string FileKey = "files";
-		private Regex Pattern;
+		private const string SearchKey = "search";
+		private const string ReplacementKey = "replace";
 
 		public ReplaceInFile( Dictionary<string, string> settings, Dictionary<string, string> variables )
 			: base( settings, variables )
 		{
-			Pattern = new Regex( @"(\d+\.\d+((\.\d+)?\.\d+)?)" );
 		}
 
 		public override OperationResult Bump( Version oldVersion, Version newVersion )
 		{
-			OperationResult results = new OperationResult();
-			string[] files = GetValue( FileKey ).Split( ';' );
+			OperationResult result = new OperationResult();
 
-			foreach( string fileName in files )
+			string versionPattern = Regex.Escape( oldVersion.ToString() );
+			//string replacement = newVersion.ToString();
+			string replacement = GetValue( ReplacementKey );
+			if( replacement == null )
+			{
+				replacement = string.Format( "{0}$2", newVersion );
+			}
+			else
+			{
+				replacement = string.Format( replacement, newVersion );
+			}
+
+			string pattern = GetValue( SearchKey );
+			if( pattern == null )
+			{
+				pattern = string.Format( "\\b({0})\\b([^\\.]){{1}}", versionPattern );
+			}
+			else
+			{
+				pattern = string.Format( pattern, versionPattern );
+			}
+			Regex regex = new Regex( pattern );
+
+			string[] files = GetValue( FileKey ).Split( ';' );
+			foreach( string file in files )
 			{
 				try
 				{
-					string content = File.ReadAllText( fileName );
+					string content = File.ReadAllText( file );
 
-					Pattern.Replace( content, newVersion.ToString() );
+					content = regex.Replace( content, replacement );
 
-					File.WriteAllText( fileName, content );
+					File.WriteAllText( file, content );
 				}
 				catch( IOException ex )
 				{
-					results.AddError( string.Format( "{0} => {1}", fileName, ex ) );
+					result.AddError( string.Format( "{0} => {1}", file, ex ) );
 				}
 			}
 
-			return results;
+			return result;
 		}
 
 		public override OperationResult Validate()
@@ -58,9 +98,18 @@ namespace BumpVersion.Tasks
 			{
 				result.AddError( "No files given" );
 			}
+			else
+			{
+				foreach( string file in files.Split( ';' ) )
+				{
+					if( !File.Exists( file ) )
+					{
+						result.AddError( string.Format( "File '{0}' does not exist", file ) );
+					}
+				}
+			}
 
 			return result;
 		}
 	}
-#endif
 }

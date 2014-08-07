@@ -1,4 +1,24 @@
-﻿using System;
+﻿// Copyright (c) 2014 Matthias Specht
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -14,27 +34,28 @@ namespace BumpVersion
 		{
 			Console.Error.NewLine = Environment.NewLine;
 
-			if( args.Length < 1 || args.Length > 2 )
+			CommandLineParser cmdParser = new CommandLineParser( args );
+			if( !cmdParser.IsValid )
 			{
-				PrintUsage();
+				cmdParser.PrintUsage();
 				Environment.ExitCode = 0;
 				return;
 			}
 
 			// Parse given version
 			Version newVersion;
-			if( !Version.TryParse( args[0], out newVersion ) )
+			if( !Version.TryParse( cmdParser.Version, out newVersion ) )
 			{
-				Console.Error.WriteLine( "Version '{0}' is not a valid version", args[0] );
+				Console.Error.WriteLine( "Version '{0}' is not a valid version", cmdParser.Version );
 				Environment.ExitCode = -3;
 				return;
 			}
 
 			// Set project file to load
 			string projectFile = "bumpversion.xml";
-			if( args.Length == 2 )
+			if( cmdParser.ProjectFile != null )
 			{
-				projectFile = args[1];
+				projectFile = cmdParser.ProjectFile;
 			}
 
 			// Load project
@@ -75,15 +96,6 @@ namespace BumpVersion
 
 			Console.WriteLine( "Successfully bumped version to {0}", newVersion );
 			Environment.ExitCode = 0;
-		}
-
-		private static void PrintUsage()
-		{
-			Console.WriteLine( "BumpVersion {0} by Matthias Specht", Assembly.GetExecutingAssembly().GetName().Version );
-			Console.WriteLine( "Usage: {0} VERSION [PROJECT_FILE=bumpversion.xml]", Environment.GetCommandLineArgs()[0] );
-			Console.WriteLine();
-			Console.WriteLine( "VERSION:      The version to bump to" );
-			Console.WriteLine( "PROJECT_FILE: The project file to load. Defaults to 'bumpversion.xml'" );
 		}
 	}
 }

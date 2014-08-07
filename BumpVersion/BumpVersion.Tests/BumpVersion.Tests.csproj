@@ -59,16 +59,17 @@
   </Choose>
   <ItemGroup>
     <Compile Include="BumperTests.cs" />
-    <Compile Include="BumpTaskTests.cs" />
-    <Compile Include="CreateVariableTests.cs" />
-    <Compile Include="GitCommitTests.cs" />
+    <Compile Include="Tasks\BumpTaskTests.cs" />
+    <Compile Include="Tasks\CreateVariableTests.cs" />
+    <Compile Include="Tasks\GitCommitTests.cs" />
     <Compile Include="OperationResultTests.cs" />
     <Compile Include="ProgramTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ReadVSProjectTests.cs" />
+    <Compile Include="Tasks\ReadVSProjectTests.cs" />
+    <Compile Include="Tasks\ReplaceInFileTests.cs" />
     <Compile Include="TestData.cs" />
-    <Compile Include="WixProductIDTests.cs" />
-    <Compile Include="WriteToFileTests.cs" />
+    <Compile Include="Tasks\WixProductIDTests.cs" />
+    <Compile Include="Tasks\WriteToFileTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BumpVersion\BumpVersion.csproj">

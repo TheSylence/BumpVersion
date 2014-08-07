@@ -20,56 +20,41 @@
 
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BumpVersion.Tasks
+namespace BumpVersion
 {
-	/// <summary>
-	/// Task that writes the given version to one or more files
-	/// </summary>
-	internal class WriteToFile : BumpTask
+	internal class CommandLineParser
 	{
-		private const string FileKey = "files";
+		public readonly bool IsValid;
+		public readonly string ProjectFile;
+		public readonly string Version;
 
-		public WriteToFile( Dictionary<string, string> settings, Dictionary<string, string> variables )
-			: base( settings, variables )
+		public CommandLineParser( string[] args )
 		{
-		}
-
-		public override OperationResult Bump( Version oldVersion, Version newVersion )
-		{
-			OperationResult result = new OperationResult();
-			string[] files = GetValue( FileKey ).Split( ';' );
-
-			foreach( string fileName in files )
+			if( args.Length < 1 || args.Length > 2 )
 			{
-				try
-				{
-					File.WriteAllText( fileName, newVersion.ToString() );
-				}
-				catch( IOException ex )
-				{
-					result.AddError( string.Format( "{0} => {1}", fileName, ex ) );
-				}
+				return;
 			}
 
-			return result;
+			IsValid = true;
+			Version = args[0];
+			if( args.Length == 2 )
+			{
+				ProjectFile = args[1];
+			}
 		}
 
-		public override OperationResult Validate()
+		public void PrintUsage()
 		{
-			OperationResult result = new OperationResult();
-
-			string files = GetValue( FileKey );
-			if( string.IsNullOrWhiteSpace( files ) )
-			{
-				result.AddError( "No files given" );
-			}
-
-			return result;
+			Console.WriteLine( "BumpVersion {0} by Matthias Specht", Assembly.GetExecutingAssembly().GetName().Version );
+			Console.WriteLine( "Usage: {0} VERSION [PROJECT_FILE=bumpversion.xml]", Environment.GetCommandLineArgs()[0] );
+			Console.WriteLine();
+			Console.WriteLine( "VERSION:      The version to bump to" );
+			Console.WriteLine( "PROJECT_FILE: The project file to load. Defaults to 'bumpversion.xml'" );
 		}
 	}
 }

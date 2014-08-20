@@ -67,14 +67,14 @@ namespace BumpVersion.Tasks
 			try
 			{
 				node.Attributes.GetNamedItem( "Id" ).Value = Guid.NewGuid().ToString();
+
+				doc.PreserveWhitespace = true;
+				doc.Save( wixFile );
 			}
 			catch( Exception ex )
 			{
 				result.AddError( ex.ToString() );
 			}
-
-			doc.PreserveWhitespace = true;
-			doc.Save( wixFile );
 
 			return result;
 		}

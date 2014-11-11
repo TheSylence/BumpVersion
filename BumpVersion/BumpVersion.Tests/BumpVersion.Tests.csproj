@@ -95,6 +95,9 @@
     <Content Include="ReferenceData\font.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="ReferenceData\fontSize.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="ReferenceData\rectangleCut.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

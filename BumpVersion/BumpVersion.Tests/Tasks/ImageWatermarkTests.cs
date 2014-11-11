@@ -42,12 +42,25 @@ namespace BumpVersion.Tests.Tasks
 			CompareImageWithReference( "rectangleCut.png" );
 
 			settings["rect"] = "0;0";
+
 			settings["dest"] = "font.png";
-			settings.Add( "font", "Consolas:13" );
+			settings.Add( "font", "Consolas" );
 			task = new ImageWatermark( settings, variables );
 			validation = task.Bump( new Version( 1, 0 ), new Version( 1, 1 ) );
 			Assert.IsTrue( validation.IsSuccess );
 			CompareImageWithReference( "font.png" );
+
+			settings["dest"] = "fontSize.png";
+			settings["font"] = "Consolas:13";
+			task = new ImageWatermark( settings, variables );
+			validation = task.Bump( new Version( 1, 0 ), new Version( 1, 1 ) );
+			Assert.IsTrue( validation.IsSuccess );
+			CompareImageWithReference( "fontSize.png" );
+
+			File.Delete( "SourceImage.png" );
+			validation = task.Bump( new Version( 1, 0 ), new Version( 1, 1 ) );
+			Assert.IsFalse( validation.IsSuccess );
+			Assert.IsTrue( validation.Errors[0].Contains( "FileNotFoundException" ) );
 		}
 
 		[TestMethod]
@@ -112,7 +125,6 @@ namespace BumpVersion.Tests.Tasks
 
 			Assert.IsFalse( validation.IsSuccess );
 			Assert.IsTrue( validation.Errors.Contains( "No destination file given" ) );
-			Assert.IsTrue( validation.Errors.Contains( "No rectangle given" ) );
 
 			settings.Add( "source", "watermarksource" );
 			if( File.Exists( "watermarksource" ) )

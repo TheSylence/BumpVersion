@@ -54,15 +54,25 @@ namespace BumpVersion.Tasks
 			}
 
 			string strRect = GetValue( RectangleKey );
-			string[] rectParts = strRect.Split( ';' );
+			int[] rectSizes;
 			bool changeDimensions = false;
-			if( rectParts.Length == 2 )
+			if( strRect != null )
 			{
-				changeDimensions = true;
-				rectParts = new string[] { rectParts[0], rectParts[1], "0", "0" };
-			}
+				string[] rectParts = strRect.Split( ';' );
 
-			int[] rectSizes = rectParts.Select( s => Convert.ToInt32( s ) ).ToArray();
+				if( rectParts.Length == 2 )
+				{
+					changeDimensions = true;
+					rectParts = new string[] { rectParts[0], rectParts[1], "0", "0" };
+				}
+
+				rectSizes = rectParts.Select( s => Convert.ToInt32( s ) ).ToArray();
+			}
+			else
+			{
+				rectSizes = new int[] { 0, 0, 0, 0 };
+				changeDimensions = true;
+			}
 
 			RectangleF rect = new RectangleF( rectSizes[0], rectSizes[1], rectSizes[2], rectSizes[3] );
 
@@ -141,10 +151,6 @@ namespace BumpVersion.Tasks
 						result.AddError( string.Format( "Negative value given: {0}", rect ) );
 					}
 				}
-			}
-			else
-			{
-				result.AddError( "No rectangle given" );
 			}
 
 			string font = GetValue( FontKey );

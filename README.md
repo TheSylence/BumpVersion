@@ -89,6 +89,14 @@ Key | Description | Required?
 --- | ------------ | ----------
 files | List of files the version number should be written to. | Yes
 
+## Message
+
+Writes a message to the console when the task is being executed.
+
+Key | Description | Required?
+--- | ------------ | ----------
+text | The message to display on the console. | Yes
+stderr | Write message to stderr? | No (default is to write to stdout)
 
 ===========
 More tasks are to follow!

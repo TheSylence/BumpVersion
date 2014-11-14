@@ -44,6 +44,7 @@
   <ItemGroup>
     <Compile Include="Bumper.cs" />
     <Compile Include="CommandLineParser.cs" />
+    <Compile Include="Tasks\BumpCopyrightYear.cs" />
     <Compile Include="Tasks\BumpTask.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

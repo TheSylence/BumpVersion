@@ -19,7 +19,6 @@ namespace BumpVersion.Tests.Tasks
 			Dictionary<string, string> settings = new Dictionary<string, string>();
 			settings.Add( "source", "SourceImage.png" );
 			settings.Add( "dest", "default.png" );
-			settings.Add( "rect", "0;0" );
 
 			ImageWatermark task = new ImageWatermark( settings, variables );
 			OperationResult validation = task.Bump( new Version( 1, 0 ), new Version( 1, 1 ) );

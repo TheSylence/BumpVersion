@@ -89,6 +89,18 @@ Key | Description | Required?
 --- | ------------ | ----------
 files | List of files the version number should be written to. | Yes
 
+## ImageWatermark
+
+Prints the new Version number on an image. This can be used to automatically create splash screens
+with the correct version number for example.
+
+Key | Description | Required?
+--- | ------------ | ----------
+source | File name of the image that will be used as a template | Yes
+dest | File name to save the watermarked image to. Given in the form X;Y;W;H (W and H can be ommited to use the entire remaining image) | Yes
+rect | Rectangle (in pixels) that defines where to print the version to. | No (default is to use the entire image)
+color | Color that should be used to print the text. Can be specified like colors in HTML | No (default is white)
+font | Font that should be used to print the text. Specify as Font:Size. When Size is omitted 12 pts will be used. | No (default is Arial in 12 pt)
 
 ===========
 More tasks are to follow!

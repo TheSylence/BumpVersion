@@ -35,6 +35,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -49,6 +50,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tasks\CreateVariable.cs" />
     <Compile Include="Tasks\GitCommit.cs" />
+    <Compile Include="Tasks\ImageWatermark.cs" />
     <Compile Include="Tasks\Message.cs" />
     <Compile Include="Tasks\ReadVSProject.cs" />
     <Compile Include="Tasks\ReplaceInFile.cs" />

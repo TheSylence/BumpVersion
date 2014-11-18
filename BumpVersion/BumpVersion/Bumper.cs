@@ -1,52 +1,39 @@
 ﻿// Copyright (c) 2014 Matthias Specht
 //
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
+// Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
+// associated documentation files (the "Software"), to deal in the Software without restriction,
+// including without limitation the rights to use, copy, modify, merge, publish, distribute,
+// sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
 //
-// The above copyright notice and this permission notice shall be included in all
-// copies or substantial portions of the Software.
+// The above copyright notice and this permission notice shall be included in all copies or
+// substantial portions of the Software.
 //
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-// SOFTWARE.
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT
+// NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+// NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 using BumpVersion.Tasks;
 
 namespace BumpVersion
 {
-	/// <summary>
-	/// The bumper that loads a project file and can execute the tasks defined in it.
-	/// </summary>
+	/// <summary>The bumper that loads a project file and can execute the tasks defined in it.</summary>
 	public class Bumper
 	{
-		private Version CurrentVersion;
-		private Dictionary<string, Type> KnownTasks;
-		private List<BumpTask> TaskList;
-
 		public Bumper( string fileName )
 		{
 			ReadKnownTasks();
 			ParseFile( fileName );
 		}
 
-		/// <summary>
-		/// Does the actual bumping by executiing all loaded tasks.
-		/// </summary>
+		/// <summary>Does the actual bumping by executiing all loaded tasks.</summary>
 		/// <param name="newVersion">The version to bump to</param>
 		/// <returns>Result of all executed tasks</returns>
 		public OperationResult Bump( Version newVersion )
@@ -61,9 +48,7 @@ namespace BumpVersion
 			return result;
 		}
 
-		/// <summary>
-		/// Saves the current version to the project file
-		/// </summary>
+		/// <summary>Saves the current version to the project file</summary>
 		/// <param name="fileName">Path of the project file</param>
 		/// <param name="version">The version to save</param>
 		public void SaveCurrentVersion( string fileName, Version version )
@@ -74,9 +59,7 @@ namespace BumpVersion
 			doc.Save( fileName );
 		}
 
-		/// <summary>
-		/// Validates the project and all containing tasks.
-		/// </summary>
+		/// <summary>Validates the project and all containing tasks.</summary>
 		/// <returns>The validation result</returns>
 		public OperationResult Vaildate( Version newVersion )
 		{
@@ -99,9 +82,7 @@ namespace BumpVersion
 			return result;
 		}
 
-		/// <summary>
-		/// Reads the project file and creates the needed BumpTasks
-		/// </summary>
+		/// <summary>Reads the project file and creates the needed BumpTasks</summary>
 		/// <param name="fileName">The project file to load</param>
 		private void ParseFile( string fileName )
 		{
@@ -163,9 +144,7 @@ namespace BumpVersion
 			}
 		}
 
-		/// <summary>
-		/// Creates a list of all available <see cref="Tasks.BumpTask"/> implementations
-		/// </summary>
+		/// <summary>Creates a list of all available <see cref="Tasks.BumpTask"/> implementations</summary>
 		private void ReadKnownTasks()
 		{
 			KnownTasks = new Dictionary<string, Type>();
@@ -178,5 +157,9 @@ namespace BumpVersion
 				KnownTasks.Add( type.Name, type );
 			}
 		}
+
+		private Version CurrentVersion;
+		private Dictionary<string, Type> KnownTasks;
+		private List<BumpTask> TaskList;
 	}
 }

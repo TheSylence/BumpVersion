@@ -1,71 +1,45 @@
 ﻿// Copyright (c) 2014 Matthias Specht
 //
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
+// Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
+// associated documentation files (the "Software"), to deal in the Software without restriction,
+// including without limitation the rights to use, copy, modify, merge, publish, distribute,
+// sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
 //
-// The above copyright notice and this permission notice shall be included in all
-// copies or substantial portions of the Software.
+// The above copyright notice and this permission notice shall be included in all copies or
+// substantial portions of the Software.
 //
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-// SOFTWARE.
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT
+// NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+// NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace BumpVersion
 {
-	/// <summary>
-	/// Class that collects error and warning messages
-	/// </summary>
+	/// <summary>Class that collects error and warning messages</summary>
 	public class OperationResult
 	{
-		internal List<string> Errors = new List<string>();
-		internal List<string> Warnings = new List<string>();
-
-		/// <summary>
-		/// Get a value indicating whether this result defines a success (no errors)
-		/// </summary>
-		public bool IsSuccess
-		{
-			get
-			{
-				return Errors.Count == 0;
-			}
-		}
-
-		/// <summary>
-		/// Adds an error to this result
-		/// </summary>
+		/// <summary>Adds an error to this result</summary>
 		/// <param name="message">The message to add</param>
 		public void AddError( string message )
 		{
 			Errors.Add( message );
 		}
 
-		/// <summary>
-		/// Adds a warning to this result
-		/// </summary>
+		/// <summary>Adds a warning to this result</summary>
 		/// <param name="message">The message to add</param>
 		public void AddWarning( string message )
 		{
 			Warnings.Add( message );
 		}
 
-		/// <summary>
-		/// Merges this result with another one
-		/// </summary>
+		/// <summary>Merges this result with another one</summary>
 		/// <param name="other">The result to merge</param>
 		public void Merge( OperationResult other )
 		{
@@ -108,5 +82,17 @@ namespace BumpVersion
 
 			return sb.ToString();
 		}
+
+		/// <summary>Get a value indicating whether this result defines a success (no errors)</summary>
+		public bool IsSuccess
+		{
+			get
+			{
+				return Errors.Count == 0;
+			}
+		}
+
+		internal List<string> Errors = new List<string>();
+		internal List<string> Warnings = new List<string>();
 	}
 }

@@ -4,8 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using BumpVersion.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -16,30 +14,22 @@ namespace BumpVersion.Tests.Tasks
 	public class ReplaceInFileTests
 	{
 		[TestMethod]
-		public void ValidateTest()
+		public void BumpCustomPatternTest()
 		{
 			Dictionary<string, string> settings = new Dictionary<string, string>();
 			Dictionary<string, string> variables = new Dictionary<string, string>();
+			OperationResult result;
+			settings.Add( "files", "replace.custom.txt" );
+			settings.Add( "search", "Version {0}" );
+			settings.Add( "replace", "Version {0}" );
+
+			File.WriteAllText( "replace.custom.txt", "Version 0.1 will be replaced, 0.1 not" );
+
 			ReplaceInFile task = new ReplaceInFile( settings, variables );
-			OperationResult result = task.Validate();
+			result = task.Bump( new Version( 0, 1 ), new Version( 0, 2 ) );
 
-			Assert.IsFalse( result.IsSuccess );
-			Assert.IsTrue( result.Errors.Contains( "No files given" ) );
-
-			settings.Add( "files", "non.existing" );
-
-			task = new ReplaceInFile( settings, variables );
-			result = task.Validate();
-
-			Assert.IsFalse( result.IsSuccess );
-			Assert.IsTrue( result.Errors.Contains( "File 'non.existing' does not exist" ) );
-
-			File.WriteAllText( "test.txt", "" );
-			settings["files"] = "test.txt";
-
-			task = new ReplaceInFile( settings, variables );
-			result = task.Validate();
-			Assert.IsTrue( result.IsSuccess );
+			string content = File.ReadAllText( "replace.custom.txt" );
+			Assert.AreEqual( "Version 0.2 will be replaced, 0.1 not", content );
 		}
 
 		[TestMethod]
@@ -67,25 +57,6 @@ namespace BumpVersion.Tests.Tasks
 		}
 
 		[TestMethod]
-		public void BumpCustomPatternTest()
-		{
-			Dictionary<string, string> settings = new Dictionary<string, string>();
-			Dictionary<string, string> variables = new Dictionary<string, string>();
-			OperationResult result;
-			settings.Add( "files", "replace.custom.txt" );
-			settings.Add( "search", "Version {0}" );
-			settings.Add( "replace", "Version {0}" );
-
-			File.WriteAllText( "replace.custom.txt", "Version 0.1 will be replaced, 0.1 not" );
-
-			ReplaceInFile task = new ReplaceInFile( settings, variables );
-			result = task.Bump( new Version( 0, 1 ), new Version( 0, 2 ) );
-
-			string content = File.ReadAllText( "replace.custom.txt" );
-			Assert.AreEqual( "Version 0.2 will be replaced, 0.1 not", content );
-		}
-
-		[TestMethod]
 		public void BumpExceptionTest()
 		{
 			Dictionary<string, string> settings = new Dictionary<string, string>();
@@ -99,6 +70,33 @@ namespace BumpVersion.Tests.Tasks
 
 			Assert.IsFalse( result.IsSuccess );
 			Assert.IsTrue( result.Errors[0].StartsWith( "non.existing => System.IO.FileNotFoundException" ) );
+		}
+
+		[TestMethod]
+		public void ValidateTest()
+		{
+			Dictionary<string, string> settings = new Dictionary<string, string>();
+			Dictionary<string, string> variables = new Dictionary<string, string>();
+			ReplaceInFile task = new ReplaceInFile( settings, variables );
+			OperationResult result = task.Validate();
+
+			Assert.IsFalse( result.IsSuccess );
+			Assert.IsTrue( result.Errors.Contains( "No files given" ) );
+
+			settings.Add( "files", "non.existing" );
+
+			task = new ReplaceInFile( settings, variables );
+			result = task.Validate();
+
+			Assert.IsFalse( result.IsSuccess );
+			Assert.IsTrue( result.Errors.Contains( "File 'non.existing' does not exist" ) );
+
+			File.WriteAllText( "test.txt", "" );
+			settings["files"] = "test.txt";
+
+			task = new ReplaceInFile( settings, variables );
+			result = task.Validate();
+			Assert.IsTrue( result.IsSuccess );
 		}
 	}
 }

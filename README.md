@@ -102,5 +102,14 @@ rect | Rectangle (in pixels) that defines where to print the version to. | No (d
 color | Color that should be used to print the text. Can be specified like colors in HTML | No (default is white)
 font | Font that should be used to print the text. Specify as Font:Size. When Size is omitted 12 pts will be used. | No (default is Arial in 12 pt)
 
+## Message
+
+Writes a message to the console when the task is being executed.
+
+Key | Description | Required?
+--- | ------------ | ----------
+text | The message to display on the console. | Yes
+stderr | Write message to stderr? | No (default is to write to stdout)
+
 ===========
 More tasks are to follow!

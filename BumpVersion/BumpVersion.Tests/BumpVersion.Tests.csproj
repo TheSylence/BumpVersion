@@ -67,6 +67,7 @@
     <Compile Include="ProgramTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tasks\ImageWatermarkTests.cs" />
+    <Compile Include="Tasks\MessageTests.cs" />
     <Compile Include="Tasks\ReadVSProjectTests.cs" />
     <Compile Include="Tasks\ReplaceInFileTests.cs" />
     <Compile Include="TestData.cs" />

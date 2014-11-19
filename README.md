@@ -24,6 +24,42 @@ This would write the version number to a file called *version.txt* everytime you
 Now if you want to bump the version of your project to 1.2 you would call bumpversion.exe via the command line with
 `bumpversion.exe 1.2`
 
+## A more complex example
+
+```xml
+<?xml version="1.0"?>
+<bumpversion currentVersion="1.1">
+		<!-- Read files in program.csproj and store them in @code_files -->
+		<Task type="ReadVSProject">
+			<key name="projectFile" value="program.csproj" />
+			<key name="output" value="code_files" />
+		</Task>
+		<!-- Replace version number in all files in the project -->
+		<Task type="ReplaceInFile">
+ 			<key name="files" value="@code_files" />
+ 		</Task>
+		<!-- Write version to a file called "version.txt" -->
+		<Task type="WriteToFile">
+			<key name="files" value="version.txt" />
+		</Task>
+		<!-- Update ID in WiX project "product.wxs" in the Setup folder -->
+		<Task type="WixProductID">
+			<key name="wixFile" value="Setup/product.wxs" />
+		</Task>
+		<!-- Commit the changes to the local git repository and use a custom message -->
+		<Task type="GitCommit">
+			<key name="message" value="Version is now {0}" />
+		</Task>
+</bumpversion>
+```
+
+When you bump the version using this file the following things will be done:
+- First read all code file from the Visual Studio C# Project 'program.csproj' and store them in a variable
+- Search in every file in the project for a version and replace it
+- Write the version number to a file (let's assume the program uses this file for something)
+- Then generate a new ProductID in the WiX definition file for the program's setup file so the installer can be used to upgrade a previous installation
+- And finally commit everything to the local git repository
+
 # Tasks
 
 A project file may contain as many tasks as you want to.
@@ -112,4 +148,4 @@ text | The message to display on the console. | Yes
 stderr | Write message to stderr? | No (default is to write to stdout)
 
 ===========
-More tasks are to follow!
+More tasks will be added :)

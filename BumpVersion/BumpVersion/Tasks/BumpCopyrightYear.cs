@@ -37,7 +37,7 @@ namespace BumpVersion.Tasks
 		private const string LinesKey = "lines";
 		private const string PatternKey = "pattern";
 		private const string RangeKey = "range";
-		private const string DefaultPattern = "";
+		private const string DefaultPattern = @"Copyright(?: \([cC]\))? (\d{4})((?:-\d{4})?|(?:,\d{4})*) (?:.*)";
 
 		public BumpCopyrightYear( Dictionary<string, string> settings, Dictionary<string, string> variables )
 			: base( settings, variables )
@@ -91,7 +91,6 @@ namespace BumpVersion.Tasks
 			}
 
 			Regex pattern;
-			string replacement = null;
 			string strPattern = GetValue( PatternKey );
 			if( strPattern != null )
 			{
@@ -114,10 +113,48 @@ namespace BumpVersion.Tasks
 						continue;
 					}
 
-					if( pattern.IsMatch( lines[i] ) )
+					Match match = pattern.Match( lines[i] );
+					if( match.Success && match.Captures.Count > 1 )
 					{
 						touched = true;
-						lines[i] = pattern.Replace( lines[i], replacement );
+						bool multiple = match.Captures.Count > 2;
+
+
+						int start = match.Captures[1].Index;
+						int length;
+
+						if( multiple )
+						{
+							length = match.Captures[1].Length + match.Captures[2].Length + ( match.Captures[2].Index - start );
+						}
+						else
+						{
+							length = match.Captures[1].Length;
+						}
+
+						string strYears = lines[i].Substring( start, length );
+						int[] years = strYears.Split( new[] { '-', ',' } ).Select( y => Convert.ToInt32( y ) ).ToArray();
+						if( range )
+						{
+							years = new[] { years.Min(), Math.Max( years.Max(), DateTime.Now.Year ) };
+						}
+						else
+						{
+							years = years.Concat( new[] { DateTime.Now.Year } ).ToArray();
+						}
+
+						string line = lines[i].Substring( 0, start );
+
+						line += lines[i].Substring( start + length );
+						if( range )
+						{
+							line += string.Format( "{0}-{1}", years[0], years[1] );
+						}
+						else
+						{
+							line += string.Join( ",", years );
+						}
+						lines[i] = line;
 					}
 				}
 
@@ -174,7 +211,7 @@ namespace BumpVersion.Tasks
 					int tmp;
 					if( !int.TryParse( line, out tmp ) )
 					{
-						result.AddError( string.Format( "Invalid line {0}", line ) );
+						result.AddError( string.Format( "Invalid line: {0}", line ) );
 					}
 				}
 			}

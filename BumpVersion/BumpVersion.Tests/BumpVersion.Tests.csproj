@@ -59,6 +59,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="BumperTests.cs" />
+    <Compile Include="Tasks\BumpCopyrightYearTests.cs" />
     <Compile Include="Tasks\BumpTaskTests.cs" />
     <Compile Include="Tasks\CreateVariableTests.cs" />
     <Compile Include="Tasks\GitCommitTests.cs" />

@@ -89,6 +89,15 @@ Key | Description | Required?
 --- | ------------ | ----------
 files | List of files the version number should be written to. | Yes
 
+## BumpCopyrightYear
+
+Updates copyright years in file headers to the current year.
+
+Key | Description | Required?
+--- | ------------ | ----------
+files | List of files to bump year in | Yes
+lines | Lines to search years for | No (if ommitted the whole file will be searched). Value can be one of the following formats:<ul><li>**2-5**: Search in the range from line 2 to line 5.</li><li>**-5**: Search in the range from the first line to line 5.</li><li>**5-**: Search in the range from line 5 to the end of the file.</li><li>**4;10;12**: Only search in lines 4, 10 and 12.</ul>
+range | Write new copyright year as a range (e.g. 2009-2013) or a comma separated list (e.g. 2009,2010,2013) | No (default is `true`).
 
 ===========
 More tasks are to follow!

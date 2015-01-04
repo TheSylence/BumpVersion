@@ -33,16 +33,9 @@ namespace BumpVersion.Tasks
 	/// </summary>
 	internal class BumpCopyrightYear : BumpTask
 	{
-		private const string FileKey = "files";
-		private const string LinesKey = "lines";
-		private const string PatternKey = "pattern";
-		private const string RangeKey = "range";
-		private const string DefaultPattern = @"Copyright(?: \([cC]\))? (\d{4})((?:-\d{4})?|(?:,\d{4})*) (?:.*)";
-
 		public BumpCopyrightYear( Dictionary<string, string> settings, Dictionary<string, string> variables )
 			: base( settings, variables )
 		{
-
 		}
 
 		public override OperationResult Bump( Version oldVersion, Version newVersion )
@@ -54,30 +47,28 @@ namespace BumpVersion.Tasks
 			string linesValue = GetValue( LinesKey );
 			if( linesValue != null )
 			{
-				string[] lineArray;
+				int[] lineArray;
 
 				if( linesValue.Contains( ';' ) )
 				{
-					lineArray = linesValue.Split( ';' );
+					lineArray = linesValue.Split( ';' ).Select( l => int.Parse( l ) ).ToArray();
 				}
 				else if( linesValue.Contains( '-' ) )
 				{
 					if( linesValue.StartsWith( "-" ) )
 					{
-						linesValue = "0" + linesValue;
+						linesValue = "1" + linesValue;
 					}
 					else if( linesValue.EndsWith( "-" ) )
 					{
 						linesValue += int.MaxValue.ToString();
 					}
 
-					lineArray = linesValue.Split( new[] { '-' }, 2 );
-					lineArray = Enumerable.Range( int.Parse( lineArray[0] ), int.Parse( lineArray[1] ) - int.Parse( lineArray[0] ) )
-						.Select( i => i.ToString() ).ToArray();
+					lineArray = linesValue.Split( new[] { '-' }, 2 ).Select( l => int.Parse( l ) ).ToArray();
 				}
 				else
 				{
-					lineArray = new[] { linesValue };
+					lineArray = new[] { int.Parse( linesValue ) };
 				}
 
 				linesToSearch = lineArray.Select( l => Convert.ToInt32( l ) ).ToArray();
@@ -90,16 +81,7 @@ namespace BumpVersion.Tasks
 				range = bool.Parse( strRange );
 			}
 
-			Regex pattern;
-			string strPattern = GetValue( PatternKey );
-			if( strPattern != null )
-			{
-				pattern = new Regex( strPattern );
-			}
-			else
-			{
-				pattern = new Regex( DefaultPattern );
-			}
+			Regex pattern = new Regex( DefaultPattern );
 
 			foreach( string fileName in files )
 			{
@@ -108,34 +90,25 @@ namespace BumpVersion.Tasks
 
 				for( int i = 0; i < lines.Length; ++i )
 				{
-					if( linesToSearch != null && !linesToSearch.Contains( i ) )
+					if( linesToSearch != null && !linesToSearch.Contains( i + 1 ) )
 					{
 						continue;
 					}
 
 					Match match = pattern.Match( lines[i] );
-					if( match.Success && match.Captures.Count > 1 )
+					if( match.Success )
 					{
 						touched = true;
-						bool multiple = match.Captures.Count > 2;
 
-
-						int start = match.Captures[1].Index;
-						int length;
-
-						if( multiple )
-						{
-							length = match.Captures[1].Length + match.Captures[2].Length + ( match.Captures[2].Index - start );
-						}
-						else
-						{
-							length = match.Captures[1].Length;
-						}
+						int start = match.Groups[1].Index;
+						int length = match.Groups[1].Length + match.Groups[2].Length;
 
 						string strYears = lines[i].Substring( start, length );
 						int[] years = strYears.Split( new[] { '-', ',' } ).Select( y => Convert.ToInt32( y ) ).ToArray();
 						if( range )
 						{
+							// This will generate 2009-2012 from 2009,2011 in 2012
+							// I guess the correct behavior would be to generate 2009,2011-2012
 							years = new[] { years.Min(), Math.Max( years.Max(), DateTime.Now.Year ) };
 						}
 						else
@@ -144,8 +117,6 @@ namespace BumpVersion.Tasks
 						}
 
 						string line = lines[i].Substring( 0, start );
-
-						line += lines[i].Substring( start + length );
 						if( range )
 						{
 							line += string.Format( "{0}-{1}", years[0], years[1] );
@@ -154,6 +125,8 @@ namespace BumpVersion.Tasks
 						{
 							line += string.Join( ",", years );
 						}
+						line += lines[i].Substring( start + length );
+
 						lines[i] = line;
 					}
 				}
@@ -184,8 +157,7 @@ namespace BumpVersion.Tasks
 
 				if( lines.Contains( ';' ) )
 				{
-					lineArray = lines.Split( ';' );
-
+					lineArray = lines.Split( new[] { ';' }, StringSplitOptions.RemoveEmptyEntries );
 				}
 				else if( lines.Contains( '-' ) )
 				{
@@ -204,7 +176,6 @@ namespace BumpVersion.Tasks
 				{
 					lineArray = new[] { lines };
 				}
-
 
 				foreach( string line in lineArray )
 				{
@@ -228,5 +199,10 @@ namespace BumpVersion.Tasks
 
 			return result;
 		}
+
+		private const string DefaultPattern = @"Copyright(?: \([cC]\))? (\d{4})((?:(?:,\d{4})+)|(?:(?:-\d{4})?))(?:.*)";
+		private const string FileKey = "files";
+		private const string LinesKey = "lines";
+		private const string RangeKey = "range";
 	}
 }
